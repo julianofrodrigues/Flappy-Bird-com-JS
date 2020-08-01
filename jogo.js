@@ -1,6 +1,6 @@
 let frames = 0;
 const som_HIT = new Audio();
-som_HIT.src = './efeitos/hit.wav';
+som_HIT.src = './sons/hit.wav';
 
 const sprites = new Image();
 sprites.src = './sprites.png';
@@ -76,6 +76,7 @@ function criaChao() {
   return chao;
 }
 
+//Colisão
 function fazColisao(flappyBird, chao) {
   const flappyBirdY = flappyBird.y + flappyBird.altura;
   const chaoY = chao.y;
@@ -96,12 +97,10 @@ function criaFlappyBird() {
     altura: 24,
     x: 10,
     y: 50,
-    pulo: 4.6,
-    pula() {
-      console.log('devo pular');
+    voo: 4.6,
+    voa() {
       console.log('[antes]', flappyBird.velocidade);
-      flappyBird.velocidade =  - flappyBird.pulo;
-      console.log('[depois]', flappyBird.velocidade);
+      flappyBird.velocidade =  - flappyBird.voo;
     },
     gravidade: 0.25,
     velocidade: 0,
@@ -253,17 +252,14 @@ function criaCanos() {
 
       canos.pares.forEach(function(par) {
         par.x = par.x - 2;
-
         if(canos.temColisaoComOFlappyBird(par)) {
           console.log('Você perdeu!')
           mudaParaTela(Telas.INICIO);
         }
-
         if(par.x + canos.largura <= 0) {
           canos.pares.shift();
         }
       });
-
     }
   }
 
@@ -312,7 +308,7 @@ Telas.JOGO = {
     globais.flappyBird.desenha();
   },
   click() {
-    globais.flappyBird.pula();
+    globais.flappyBird.voa();
   },
   atualiza() {
     globais.canos.atualiza();
