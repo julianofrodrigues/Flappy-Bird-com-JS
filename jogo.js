@@ -2,6 +2,12 @@ let frames = 0;
 const som_HIT = new Audio();
 som_HIT.src = './sons/hit.wav';
 
+const som_Caiu = new Audio();
+som_Caiu.src = './sons/caiu.wav';
+
+const som_Voo = new Audio();
+som_Voo.src = './sons/voo.wav';
+
 const sprites = new Image();
 sprites.src = './sprites.png';
 
@@ -99,22 +105,19 @@ function criaFlappyBird() {
     y: 50,
     voo: 4.6,
     voa() {
-      console.log('[antes]', flappyBird.velocidade);
       flappyBird.velocidade =  - flappyBird.voo;
     },
     gravidade: 0.25,
     velocidade: 0,
     atualiza() {
       if(fazColisao(flappyBird, globais.chao)) {
-        console.log('Fez colisao');
-        som_HIT.play();
+        som_Caiu.play();
 
         setTimeout(() => {
           mudaParaTela(Telas.INICIO);
         }, 500);
         return;
       }
-  
       flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
       flappyBird.y = flappyBird.y + flappyBird.velocidade;
     },
@@ -181,7 +184,7 @@ function criaCanos() {
       spriteX: 0,
       spriteY: 169,
     },
-    ceu: {
+    teto: {
       spriteX: 52,
       spriteY: 169,
     },
@@ -191,15 +194,15 @@ function criaCanos() {
         const yRandom = par.y;
         const espacamentoEntreCanos = 90;
   
-        const canoCeuX = par.x;
-        const canoCeuY = yRandom; 
+        const canoTetoX = par.x;
+        const canoTetoY = yRandom; 
 
         //Cano do Teto
         contexto.drawImage(
           sprites, 
-          canos.ceu.spriteX, canos.ceu.spriteY,
+          canos.teto.spriteX, canos.teto.spriteY,
           canos.largura, canos.altura,
-          canoCeuX, canoCeuY,
+          canoTetoX, canoTetoY,
           canos.largura, canos.altura,
         )
         
@@ -214,9 +217,9 @@ function criaCanos() {
           canos.largura, canos.altura,
         )
 
-        par.canoCeu = {
-          x: canoCeuX,
-          y: canos.altura + canoCeuY
+        par.canoTeto = {
+          x: canoTetoX,
+          y: canos.altura + canoTetoY
         }
         par.canoChao = {
           x: canoChaoX,
@@ -229,7 +232,7 @@ function criaCanos() {
       const peDoFlappy = globais.flappyBird.y + globais.flappyBird.altura;
       
       if(globais.flappyBird.x >= par.x) {
-        if(cabecaDoFlappy <= par.canoCeu.y) {
+        if(cabecaDoFlappy <= par.canoTeto.y) {
           return true;
         }
 
@@ -243,7 +246,6 @@ function criaCanos() {
     atualiza() {
       const passou100Frames = frames % 100 === 0;
       if(passou100Frames) {
-        console.log('Passou 100 frames');
         canos.pares.push({
           x: canvas.width,
           y: -150 * (Math.random() + 1),
@@ -253,7 +255,7 @@ function criaCanos() {
       canos.pares.forEach(function(par) {
         par.x = par.x - 2;
         if(canos.temColisaoComOFlappyBird(par)) {
-          console.log('Você perdeu!')
+          som_HIT.play();
           mudaParaTela(Telas.INICIO);
         }
         if(par.x + canos.largura <= 0) {
@@ -325,7 +327,6 @@ function loop() {
   frames = frames + 1;
   requestAnimationFrame(loop);
 }
-
 
 window.addEventListener('click', function() {
   if(telaAtiva.click) {
