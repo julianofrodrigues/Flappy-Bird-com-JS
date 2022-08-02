@@ -3,7 +3,7 @@
 # Resumo do projeto
 Um clone do famoso e antigo joguinho de celular Flappy Bird, feito para rodar em navegadores com tecnologias mais simples.
 
-## Iagem do game abaixo 😬
+## Imagem do game abaixo 😬
 </p>
 <p align="center">
 <img src="https://i.imgur.com/qH4Uuzi.png"/>
